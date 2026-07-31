@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import CardCompromisso from "@/components/CardCompromisso";
 import Dashboard from "@/components/Dashboard";
 import { formatarData } from "@/utils/formatarData";
+import LoginGoogle from "@/components/LoginGoogle";
 
 interface Compromisso {
   id: number;
@@ -23,15 +24,30 @@ export default function Home() {
 
   async function buscarCompromissos() {
     try {
+      const token = localStorage.getItem("token");
+
       const resposta = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/compromissos`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
       );
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao buscar compromissos");
+      }
 
       const dados = await resposta.json();
 
-      setCompromissos(dados);
+      console.log("Resposta compromissos:", dados);
+
+      setCompromissos(Array.isArray(dados) ? dados : []);
     } catch (error) {
       console.error(error);
+      setCompromissos([]);
     } finally {
       setCarregando(false);
     }
@@ -68,6 +84,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
+      <LoginGoogle />
       {!carregando && (
         <Dashboard
           total={compromissos.length}

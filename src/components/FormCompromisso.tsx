@@ -40,6 +40,18 @@ export default function FormCompromisso({ id, modo, dadosIniciais }: Props) {
 
   async function salvar(dados: CompromissoForm) {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        await Swal.fire({
+          icon: "warning",
+          title: "Faça login",
+          text: "Você precisa entrar com sua conta Google para salvar compromissos.",
+        });
+
+        return;
+      }
+
       const resposta = await fetch(
         modo === "editar"
           ? `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`
@@ -49,6 +61,7 @@ export default function FormCompromisso({ id, modo, dadosIniciais }: Props) {
 
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
 
           body: JSON.stringify(dados),
