@@ -40,7 +40,12 @@ export default function LoginGoogle() {
         }),
       });
 
+      // Teste API
+      console.log("API_URL:", API_URL);
+      console.log("Status:", res.status);
+
       const data = await res.json();
+      console.log("Resposta:", data);
 
       if (!res.ok) {
         throw new Error(data.erro || "Falha na autenticação");

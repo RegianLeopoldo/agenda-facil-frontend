@@ -25,6 +25,13 @@ export default function Home() {
   async function buscarCompromissos() {
     try {
       const token = localStorage.getItem("token");
+      console.log("TOKEN:", token);
+
+      if (!token) {
+        setCompromissos([]);
+        setCarregando(false);
+        return;
+      }
 
       const resposta = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/compromissos`,
