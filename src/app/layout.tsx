@@ -14,8 +14,34 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
+  ),
+
   title: "Agenda Fácil",
+
   description: "Gerencie seus compromissos de forma simples e organizada.",
+
+  openGraph: {
+    title: "Agenda Fácil",
+    description: "Gerencie seus compromissos de forma simples e organizada.",
+    images: [
+      {
+        url: "/agenda-facil.png",
+        width: 1536,
+        height: 1024,
+        alt: "Agenda Fácil - Gerencie seus compromissos",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Agenda Fácil",
+    description: "Gerencie seus compromissos de forma simples e organizada.",
+    images: ["/agenda-facil.png"],
+  },
 };
 
 export default function RootLayout({
