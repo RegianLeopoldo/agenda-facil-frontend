@@ -30,9 +30,21 @@ export default function DetalhesCompromisso() {
   useEffect(() => {
     async function buscar() {
       try {
+        const token = localStorage.getItem("token");
+
         const resposta = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
         );
+
+        if (!resposta.ok) {
+          throw new Error("Compromisso não encontrado");
+        }
 
         const dados = await resposta.json();
 

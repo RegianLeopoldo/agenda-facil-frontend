@@ -27,8 +27,16 @@ export default function EditarCompromisso() {
   useEffect(() => {
     async function buscarCompromisso() {
       try {
+        const token = localStorage.getItem("token");
+
         const resposta = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
         );
 
         if (!resposta.ok) {

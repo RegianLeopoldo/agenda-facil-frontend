@@ -51,11 +51,14 @@ export default function CardCompromisso({
     try {
       setConcluindo(true);
 
+      const token = localStorage.getItem("token");
+
       const resposta = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`,
         {
           method: "PUT",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -109,15 +112,23 @@ export default function CardCompromisso({
     try {
       setExcluindo(true);
 
+      const token = localStorage.getItem("token");
+
       const resposta = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         },
       );
 
       if (!resposta.ok) {
-        throw new Error();
+        const erro = await resposta.json();
+        console.log(erro);
+        throw new Error(erro.erro || "Erro ao excluir compromisso");
       }
 
       await Swal.fire({
@@ -145,11 +156,14 @@ export default function CardCompromisso({
     try {
       setConcluindo(true);
 
+      const token = localStorage.getItem("token");
+
       const resposta = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/compromissos/${id}`,
         {
           method: "PUT",
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
@@ -159,7 +173,9 @@ export default function CardCompromisso({
       );
 
       if (!resposta.ok) {
-        throw new Error();
+        const erro = await resposta.json();
+        console.log(erro);
+        throw new Error(erro.erro || "Erro ao reabrir compromisso");
       }
 
       setStatusAtualCard("PENDENTE");
@@ -171,6 +187,7 @@ export default function CardCompromisso({
         showConfirmButton: false,
       });
 
+      atualizarLista();
       router.refresh();
     } catch (error) {
       console.error(error);
