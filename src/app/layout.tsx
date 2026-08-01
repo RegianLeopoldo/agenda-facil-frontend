@@ -14,10 +14,6 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ),
-
   title: "Agenda Fácil",
 
   description: "Gerencie seus compromissos de forma simples e organizada.",
@@ -25,14 +21,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Agenda Fácil",
     description: "Gerencie seus compromissos de forma simples e organizada.",
+    url: "https://agenda-facil-frontend-omega.vercel.app",
+    siteName: "Agenda Fácil",
     images: [
       {
-        url: "/agenda-facil.png",
+        url: "https://agenda-facil-frontend-omega.vercel.app/agenda-facil.png",
         width: 1536,
         height: 1024,
-        alt: "Agenda Fácil - Gerencie seus compromissos",
+        alt: "Agenda Fácil",
       },
     ],
+    locale: "pt_BR",
     type: "website",
   },
 
@@ -40,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Agenda Fácil",
     description: "Gerencie seus compromissos de forma simples e organizada.",
-    images: ["/agenda-facil.png"],
+    images: ["https://agenda-facil-frontend-omega.vercel.app/agenda-facil.png"],
   },
 };
 
