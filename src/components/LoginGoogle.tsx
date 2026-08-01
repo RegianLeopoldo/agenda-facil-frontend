@@ -40,12 +40,7 @@ export default function LoginGoogle() {
         }),
       });
 
-      // Teste API
-      console.log("API_URL:", API_URL);
-      console.log("Status:", res.status);
-
       const data = await res.json();
-      console.log("Resposta:", data);
 
       if (!res.ok) {
         throw new Error(data.erro || "Falha na autenticação");
@@ -76,25 +71,49 @@ export default function LoginGoogle() {
 
   if (usuario) {
     return (
-      <div className="flex items-center justify-between bg-white rounded-xl shadow p-4">
-        <div className="flex items-center gap-3">
-          {usuario.imagem && (
-            <img
-              src={usuario.imagem}
-              alt={usuario.nome}
-              className="w-10 h-10 rounded-full"
-            />
-          )}
+      <div
+        className="
+        inline-flex
+        items-center
+        gap-3
+        bg-white
+        border
+        border-gray-200
+        rounded-xl
+        shadow-sm
+        px-3
+        py-2
+      "
+      >
+        {usuario.imagem && (
+          <img
+            src={usuario.imagem}
+            alt={usuario.nome}
+            className="w-8 h-8 rounded-full"
+          />
+        )}
 
-          <div>
-            <p className="font-semibold">{usuario.nome}</p>
-            <p className="text-sm text-gray-500">{usuario.email}</p>
-          </div>
+        <div className="leading-tight">
+          <p className="font-semibold text-sm text-gray-800">{usuario.nome}</p>
+
+          <p className="text-xs text-gray-500">{usuario.email}</p>
         </div>
 
         <button
           onClick={logout}
-          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+          className="
+          ml-2
+          px-3
+          py-1.5
+          rounded-lg
+          text-xs
+          font-medium
+          text-gray-600
+          bg-gray-100
+          hover:bg-red-50
+          hover:text-red-600
+          transition
+        "
         >
           Sair
         </button>
@@ -105,7 +124,9 @@ export default function LoginGoogle() {
   return (
     <GoogleLogin
       onSuccess={handleLogin}
-      onError={() => console.log("Erro ao fazer login")}
+      onError={() => {
+        alert("Não foi possível fazer login com o Google.");
+      }}
     />
   );
 }

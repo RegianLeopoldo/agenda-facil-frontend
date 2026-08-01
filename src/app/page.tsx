@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import CardCompromisso from "@/components/CardCompromisso";
 import Dashboard from "@/components/Dashboard";
@@ -20,12 +20,14 @@ interface Compromisso {
 export default function Home() {
   const [compromissos, setCompromissos] = useState<Compromisso[]>([]);
   const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   async function buscarCompromissos() {
     try {
+      setErro(false);
       const token = localStorage.getItem("token");
-      console.log("TOKEN:", token);
 
       if (!token) {
         setCompromissos([]);
@@ -49,12 +51,11 @@ export default function Home() {
 
       const dados = await resposta.json();
 
-      console.log("Resposta compromissos:", dados);
-
       setCompromissos(Array.isArray(dados) ? dados : []);
     } catch (error) {
       console.error(error);
       setCompromissos([]);
+      setErro(true);
     } finally {
       setCarregando(false);
     }
@@ -74,9 +75,14 @@ export default function Home() {
     hoje.getMonth() + 1,
   ).padStart(2, "0")}-${String(hoje.getDate()).padStart(2, "0")}`;
 
-  const proximoCompromisso = compromissos.find(
-    (item) => item.status === "PENDENTE",
-  );
+  const proximoCompromisso = compromissos
+    .filter((item) => item.status === "PENDENTE")
+    .sort((a, b) => {
+      const dataA = new Date(`${a.data.substring(0, 10)}T${a.horario}`);
+      const dataB = new Date(`${b.data.substring(0, 10)}T${b.horario}`);
+
+      return dataA.getTime() - dataB.getTime();
+    })[0];
 
   const totalHoje = compromissos.filter(
     (item) =>
@@ -91,7 +97,11 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
-      <LoginGoogle />
+      <section className="max-w-6xl mx-auto px-6 pt-4">
+        <div className="flex justify-end">
+          <LoginGoogle />
+        </div>
+      </section>
       {!carregando && (
         <Dashboard
           total={compromissos.length}
@@ -101,7 +111,7 @@ export default function Home() {
             proximoCompromisso
               ? `${proximoCompromisso.titulo} - ${formatarData(
                   proximoCompromisso.data,
-                )}`
+                )} às ${proximoCompromisso.horario}`
               : "Nenhum"
           }
         />
@@ -116,38 +126,78 @@ export default function Home() {
 
             <p className="text-gray-500">Gerencie sua agenda facilmente</p>
           </div>
-
-          <div
-            className="
-            bg-blue-600
-            text-white
-            px-5
-            py-3
-            rounded-xl
-          "
-          >
-            Total:
-            <strong className="ml-2">{compromissos.length}</strong>
-          </div>
         </div>
 
         {carregando ? (
           <div className="text-center p-10">Carregando compromissos...</div>
+        ) : erro ? (
+          <div
+            className="
+      bg-white
+      rounded-xl
+      shadow
+      p-10
+      text-center
+    "
+          >
+            <h3 className="text-xl font-bold text-red-600">
+              Não foi possível carregar seus compromissos
+            </h3>
+
+            <p className="text-gray-500 mt-2">
+              Verifique sua conexão e tente novamente.
+            </p>
+
+            <button
+              onClick={buscarCompromissos}
+              className="
+        mt-5
+        bg-blue-600
+        hover:bg-blue-700
+        text-white
+        px-5
+        py-2
+        rounded-lg
+        transition
+      "
+            >
+              Tentar novamente
+            </button>
+          </div>
         ) : compromissos.length === 0 ? (
           <div
             className="
-            bg-white
-            rounded-xl
-            shadow
-            p-10
-            text-center
-          "
+    bg-white
+    rounded-xl
+    shadow
+    p-10
+    text-center
+  "
           >
-            <h3 className="text-xl font-bold">Nenhum compromisso cadastrado</h3>
+            <h3 className="text-xl font-bold text-gray-800">
+              Nenhum compromisso cadastrado
+            </h3>
 
             <p className="text-gray-500 mt-2">
-              Cadastre seu primeiro compromisso.
+              Cadastre seu primeiro compromisso para começar a organizar sua
+              agenda.
             </p>
+
+            <button
+              onClick={() => router.push("/cadastrar")}
+              className="
+      mt-5
+      bg-blue-600
+      hover:bg-blue-700
+      text-white
+      px-5
+      py-2.5
+      rounded-lg
+      transition
+    "
+            >
+              Cadastrar compromisso
+            </button>
           </div>
         ) : (
           <div
