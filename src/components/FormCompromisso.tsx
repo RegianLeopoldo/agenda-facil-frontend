@@ -11,6 +11,7 @@ interface CompromissoForm {
   data: string;
   horario: string;
   local: string;
+  lembreteMinutos: number;
 }
 
 interface Props {
@@ -28,7 +29,14 @@ export default function FormCompromisso({ id, modo, dadosIniciais }: Props) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<CompromissoForm>({
-    defaultValues: dadosIniciais,
+    defaultValues: dadosIniciais ?? {
+      titulo: "",
+      descricao: "",
+      data: "",
+      horario: "",
+      local: "",
+      lembreteMinutos: 30,
+    },
     mode: "onBlur",
   });
 
@@ -255,6 +263,36 @@ export default function FormCompromisso({ id, modo, dadosIniciais }: Props) {
         {errors.local && (
           <p className="text-red-600 text-sm mt-1">{errors.local.message}</p>
         )}
+      </div>
+
+      <div>
+        <label className="block text-gray-700 font-semibold mb-2">
+          Lembrete por e-mail
+        </label>
+
+        <select
+          {...register("lembreteMinutos", {
+            valueAsNumber: true,
+          })}
+          className="
+      w-full
+      border
+      border-gray-300
+      rounded-lg
+      p-3
+      text-gray-800
+      outline-none
+      focus:ring-2
+      focus:ring-blue-500
+    "
+        >
+          <option value={0}>No horário do compromisso</option>
+          <option value={15}>15 minutos antes</option>
+          <option value={30}>30 minutos antes</option>
+          <option value={60}>1 hora antes</option>
+          <option value={120}>2 horas antes</option>
+          <option value={1440}>1 dia antes</option>
+        </select>
       </div>
 
       <button
