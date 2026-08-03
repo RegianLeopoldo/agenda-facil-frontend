@@ -12,6 +12,7 @@ interface Compromisso {
   data: string;
   horario: string;
   local: string;
+  lembreteMinutos: number;
 }
 
 export default function EditarCompromisso() {
@@ -55,6 +56,7 @@ export default function EditarCompromisso() {
           horario: dados.horario,
 
           local: dados.local ?? "",
+          lembreteMinutos: dados.lembreteMinutos ?? 0,
         });
       } catch (error) {
         console.error(error);
