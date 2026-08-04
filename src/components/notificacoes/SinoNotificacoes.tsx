@@ -103,6 +103,7 @@ export default function SinoNotificacoes() {
                   key={notificacao.id}
                   notificacao={notificacao}
                   onMarcarComoLida={marcarComoLida}
+                  onAbrir={() => setAberto(false)}
                 />
               ))
             )}
