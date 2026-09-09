@@ -33,64 +33,6 @@ export function useNotificacoes(): UseNotificacoes {
     return localStorage.getItem("token");
   }, []);
 
-  /*const recarregar = useCallback(async () => {
-    const token = obterToken();
-
-    if (!API_URL) {
-      setErro("URL da API não configurada.");
-      setCarregando(false);
-      return;
-    }
-
-    if (!token) {
-      setErro("Usuário não autenticado.");
-      setCarregando(false);
-      return;
-    }
-
-    try {
-      setCarregando(true);
-      setErro(null);
-
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-
-      const [respostaNotificacoes, respostaNaoLidas] = await Promise.all([
-        fetch(`${API_URL}/notificacoes`, {
-          headers,
-        }),
-
-        fetch(`${API_URL}/notificacoes/nao-lidas`, {
-          headers,
-        }),
-      ]);
-
-      if (!respostaNotificacoes.ok) {
-        throw new Error(
-          `Erro ao buscar notificações: ${respostaNotificacoes.status}`,
-        );
-      }
-
-      if (!respostaNaoLidas.ok) {
-        throw new Error(`Erro ao buscar contador: ${respostaNaoLidas.status}`);
-      }
-
-      const dados: Notificacao[] = await respostaNotificacoes.json();
-
-      const dadosNaoLidas: RespostaNaoLidas = await respostaNaoLidas.json();
-
-      setNotificacoes(dados);
-      setNaoLidas(dadosNaoLidas.quantidade);
-    } catch (error) {
-      console.error("Erro ao carregar notificações:", error);
-
-      setErro("Não foi possível carregar as notificações.");
-    } finally {
-      setCarregando(false);
-    }
-  }, [API_URL, obterToken]);*/
-
   const recarregar = useCallback(async () => {
     const token = obterToken();
 
